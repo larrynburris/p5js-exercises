@@ -14,6 +14,7 @@ function setup() {
 
 function draw() {
   background(200);
+  checkDirectionalKeys();
   updateForm()
 
   translate(offset.x, offset.y);
@@ -22,20 +23,17 @@ function draw() {
 
   fill(150);
   renderMousePosition();
-
-  line(0, -height, 0, height);
-  line(-width, 0, width, 0);
   updateForm()
 }
 
-function keyPressed() {
-  if(keyCode === UP_ARROW) {
+function checkDirectionalKeys() {
+  if(keyIsDown(UP_ARROW)) {
     offset.y += 10;
-  } else if(keyCode === DOWN_ARROW) {
+  } else if(keyIsDown(DOWN_ARROW)) {
     offset.y -= 10;
-  } else if (keyCode === RIGHT_ARROW) {
+  } else if (keyIsDown(RIGHT_ARROW)) {
     offset.x += 10;
-  } else if(keyCode === LEFT_ARROW) {
+  } else if(keyIsDown(LEFT_ARROW)) {
     offset.x -= 10;
   }
 }
@@ -49,11 +47,22 @@ function renderMousePosition() {
 }
 
 function renderAxes() {
-  line(0, -600, 0, 600)
-  line(-600, 0, 600, 0);
-  var posString = '( 0, 0 )';
-  ellipse(0, 0, 10, 10);
-  text(posString, 10, 10);
+  line(0, -height, 0, height)
+  line(-width, 0, width, 0);
+  var increment = (width/4.0);
+  renderPointAndLabel(0, 0);
+  renderPointAndLabel(0, increment);
+  renderPointAndLabel(0, -increment);
+  renderPointAndLabel(-increment, 0);
+  renderPointAndLabel(increment, 0);
+}
+
+function renderPointAndLabel(x, y) {
+  var posString = getCoordinateString(x,y);
+  ellipse(x, y, 10, 10);
+  var xloc = x+15.0;
+  var yloc = y+15.0;
+  text(posString, xloc.toFixed(0), yloc.toFixed(0));
 }
 
 function getCoordinateString(x, y) {
